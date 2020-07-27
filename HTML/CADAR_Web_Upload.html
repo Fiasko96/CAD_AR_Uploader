@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+ <html>
+  <head>
+	<meta charset="utf-8">
+	
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+		<title>CADAR - Upload to Cloud</title>
+
+			
+	</head>
+	
+
+
+	
+	<body>
+
+			<div class = "topdiv">
+
+				<h1 style="font-family:arial">CADAR - Upload your GLB to the Cloud</h1>
+				
+			<br>
+
+			</div>
+
+			<div class = "img">
+					
+					
+						<!--https://i.imgur.com/eCQJk7B.png-->
+
+						<img src="Iconngb.png" title="source: imgur.com" width = 40%/>
+					
+											
+					<br>
+					<br>
+
+				
+			</div>
+
+			</div>
+		<br>
+	
+	<div class = "middiv">
+		<p>
+
+		<progress value="0" max="100! id="uploader style="width:100%">50% </progress> </br>
+
+		
+
+	<input type="file" value="upload" id="filebutton" />
+
+		</p>
+
+	<br>
+	<br>
+
+
+	
+
+	</div>
+	<br>
+	<br>
+
+	<div class = "bottomdiv">
+	
+		<br> <button id = "clear" onclick="deleteFiles()"> Clear all files from storage </button>
+
+		
+
+		</div>
+
+	</div>
+
+	<br>
+	<br>
+
+	<div class="alert hide">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<span class ="msg"> <strong>Success!</strong> Files deleted from storage. </span>
+		<div class="close-btn">
+			<span>&times</span>
+		</div>
+	  </div>
+
+	  <script>
+		$('button').click(function(){
+		  $('.alert').addClass("show");
+		  $('.alert').removeClass("hide");
+		  $('.alert').addClass("showAlert");
+		  setTimeout(function(){
+			$('.alert').removeClass("show");
+			$('.alert').addClass("hide");
+		  },3000);
+		});
+		$('.close-btn').click(function(){
+		  $('.alert').removeClass("show");
+		  $('.alert').addClass("hide");
+		});
+	  </script>				
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-analytics.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-storage.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyD6D2RHiEasCMDMyV5XOfkEQ_qRsMlqdeM",
+    authDomain: "cad-ar-465d7.firebaseapp.com",
+    databaseURL: "https://cad-ar-465d7.firebaseio.com",
+    projectId: "cad-ar-465d7",
+    storageBucket: "cad-ar-465d7.appspot.com",
+    messagingSenderId: "430560469989",
+    appId: "1:430560469989:web:664d1727e854891101450c",
+    measurementId: "G-8WFV5K8YLJ"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+
+	//get elements
+	var uploader = document.getElementById('uploader');
+	var fileButton = document.getElementById('filebutton');
+
+	//listen for file selection
+	fileButton.addEventListener('change', function(e) {
+
+	//get file
+	var file =e.target.files[0];
+
+	//Create storage ref
+	var storageRef= firebase.storage().ref('CAD_Files/' + file.name);
+
+	//Upload file
+	var task = storageRef.put(file);
+
+	//Update progress bar
+	task.on('state_changed',
+
+		function progress(snapshot) {
+		 var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		 uploader.value = percentage;
+		},
+
+		function error(err) {
+
+		},
+		
+		function complete(){
+
+		}
+		
+		);
+
+	
+
+});
+
+function deleteFiles() {
+ var storage = firebase.storage();
+var storageRef = storage.ref();
+// Create a reference under which you want to list
+var listRef = storageRef.child('CAD_Files');
+
+listRef.listAll().then(function(res) {
+  res.items.forEach(function(itemRef) {
+    console.log(itemRef)
+    deleteFile(itemRef)
+  });
+}).catch(function(error) {
+  console.log(error)
+});
+
+
+}
+function deleteFile(item, index) {
+  item.delete().then(function() {
+  console.log("success")
+}).catch(function(error) {
+  console.log(error)
+});
+
+} 
+
+	</script>
+
+
+	</body>
+  </html> 
