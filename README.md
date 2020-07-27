@@ -1,6 +1,6 @@
 # CAD_AR_Uploader
-HTML upload page to Firebase storage for CAD_AR application
-Web interface for uploading GLB files too Firebase Storage
+
+Web interface for uploading GLB files to Firebase Storage which are then pulled from the storage to the app.
 
 CAD_AR_Uploader
 
